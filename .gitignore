@@ -1,0 +1,29 @@
+# Python
+__pycache__/
+*.pyc
+.ipynb_checkpoints/
+
+# Environments
+.env
+.venv/
+venv/
+*.egg-info/
+
+# Data
+data/raw/
+data/processed/
+data/encoded/
+*.csv
+*.tsv
+
+# Models
+models/checkpoints/
+models/saved_models/
+*.pt
+*.pth
+
+# MLflow
+mlruns/
+
+# Notebooks checkpoints
+.ipynb_checkpoints/
