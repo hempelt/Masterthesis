@@ -1,0 +1,10 @@
+artifact_location: file:///C:/Users/hempe/Studium/Masterthesis/Repository/Masterthesis/mlruns/441353753939208797/models/m-990d88d8a50549c68983551bba206577/artifacts
+creation_timestamp: 1778768233144
+experiment_id: '441353753939208797'
+last_updated_timestamp: 1778768237520
+model_id: m-990d88d8a50549c68983551bba206577
+model_type: null
+name: model
+source_run_id: d3a7ef82592d43f4aade439e14eb2236
+status: 2
+status_message: null

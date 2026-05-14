@@ -1,0 +1,23 @@
+artifact_path: file:///C:/Users/hempe/Studium/Masterthesis/Repository/Masterthesis/mlruns/441353753939208797/models/m-990d88d8a50549c68983551bba206577/artifacts
+flavors:
+  python_function:
+    config:
+      device: null
+    data: data
+    env:
+      conda: conda.yaml
+      virtualenv: python_env.yaml
+    loader_module: mlflow.pytorch
+    pickle_module_name: mlflow.pytorch.pickle_module
+    python_version: 3.11.15
+  pytorch:
+    code: null
+    model_data: data
+    pytorch_version: 2.2.2
+mlflow_version: 3.12.0
+model_id: m-990d88d8a50549c68983551bba206577
+model_size_bytes: 1696174
+model_uuid: m-990d88d8a50549c68983551bba206577
+prompts: null
+run_id: d3a7ef82592d43f4aade439e14eb2236
+utc_time_created: '2026-05-14 14:17:13.210305'

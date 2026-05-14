@@ -1,0 +1,14 @@
+artifact_uri: file:///C:/Users/hempe/Studium/Masterthesis/Repository/Masterthesis/mlruns/441353753939208797/f53c030b1aae404ca8ded51589fc8c77/artifacts
+end_time: 1778768708223
+entry_point_name: ''
+experiment_id: '441353753939208797'
+lifecycle_stage: active
+run_id: f53c030b1aae404ca8ded51589fc8c77
+run_name: AttentionDTA_Baseline
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1778768689889
+status: 3
+tags: []
+user_id: hempe
