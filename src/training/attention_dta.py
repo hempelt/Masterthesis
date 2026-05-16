@@ -1,16 +1,18 @@
-from sklearn.metrics import mean_squared_error, r2_score
 import torch
 import torch.nn as nn
 from torch.utils.data import TensorDataset, DataLoader
 import mlflow
 import mlflow.pytorch
 from src.models.AttentionDTA import AttentionDTA
-from sklearn.metrics import mean_squared_error, r2_score, mean_absolute_error
+from sklearn.metrics import mean_squared_error, mean_absolute_error, r2_score
 from pathlib import Path
 
+learning_rate = 0.0001
+batch_size = 128
+epochs = 20
 
-train_data = torch.load("data/encoded/encoded_test.pt")
-test_data = torch.load("data/encoded/encoded_train.pt")
+train_data = torch.load("data/encoded/encoded_train.pt")
+test_data = torch.load("data/encoded/encoded_test.pt")
 
 train_dataset = TensorDataset(
     train_data["X_smiles"],
@@ -25,36 +27,40 @@ test_dataset = TensorDataset(
 )
 
 # Create dataloaders for training and testing
-train_loader = DataLoader(train_dataset, batch_size=128, shuffle=True)
-test_loader = DataLoader(test_dataset, batch_size=128, shuffle=False)
+train_loader = DataLoader(train_dataset, batch_size=batch_size, shuffle=True)
+test_loader = DataLoader(test_dataset, batch_size=batch_size, shuffle=False)
     
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
 model = AttentionDTA().to(device)
 
 loss_fn = nn.MSELoss()
-optimizer = torch.optim.Adam(model.parameters(), lr=1e-4)
-
-epochs = 20
+optimizer = torch.optim.Adam(model.parameters(), lr=learning_rate)
 
 mlruns_path = Path("mlruns").resolve()
 run_name = "AttentionDTA_Baseline"
 mlflow.set_tracking_uri(mlruns_path.as_uri())
 mlflow.set_experiment("dta_model_comparison")
 
-
 with mlflow.start_run(run_name=run_name):
 
     mlflow.log_param("model", "AttentionDTA")
     mlflow.log_param("epochs", epochs)
-    mlflow.log_param("batch_size", 128)
-    mlflow.log_param("learning_rate", 1e-4)
+    mlflow.log_param("batch_size", batch_size)
+    mlflow.log_param("learning_rate", learning_rate)
     mlflow.log_param("optimizer", "Adam")
     mlflow.log_param("smiles_max_len", 100)
     mlflow.log_param("protein_max_len", 1200)
     mlflow.log_param("embedding_dim", 128)
     mlflow.log_param("train_size", len(train_dataset))
     mlflow.log_param("test_size", len(test_dataset))
+    mlflow.log_param("attention_heads", 8)
+    mlflow.log_param("dropout_rate", 0.1)
+    mlflow.log_param("cnn_filters", "32-64-96")
+    mlflow.log_param("drug_kernels", "4-6-8")
+    mlflow.log_param("protein_kernels", "4-6-12")
+    mlflow.log_param("loss_function", "MSELoss")
+    mlflow.log_param("device", str(device))
 
     for epoch in range(epochs):
         model.train()
@@ -76,6 +82,7 @@ with mlflow.start_run(run_name=run_name):
             train_losses.append(loss.item())
         
         train_mse = sum(train_losses)/len(train_losses)
+        print(f"Epoch {epoch + 1}/{epochs} completed | Train MSE: {train_mse:.4f}")
         mlflow.log_metric("train_mse", train_mse, step=epoch + 1)
 
 
