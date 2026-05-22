@@ -21,7 +21,7 @@ df = df.dropna(subset=['IC50 (nM)'])
 #filter all samples were IC50 is < 0 or > 1e7
 df = df[(df['IC50 (nM)'] > 0) & (df['IC50 (nM)'] <= 1e7)]
 # Reduce the dataset to 1000 random samples for faster training this has to be removed for the final model training
-df = df.sample(n=1000, random_state=42).reset_index(drop=True)
+#df = df.sample(n=1000, random_state=42).reset_index(drop=True)
 
 # For the following steps the data set is split into a training and test set.
 
