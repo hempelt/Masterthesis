@@ -444,4 +444,4 @@ with mlflow.start_run(run_name=run_name):
     mlflow.log_metric("test_r2", r2)
 
     # Trainiertes Modell als MLflow-Artefakt speichern
-    mlflow.pytorch.log_model(model, "model")
+    mlflow.pytorch.log_model(model, name="model")

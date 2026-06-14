@@ -1,6 +1,8 @@
 import torch
 import torch.nn as nn
 
+
+
 class MultiHeadInteractionAttention(nn.Module):
     def __init__(self, feature_dim=96, num_heads=8):
         super().__init__()
@@ -77,11 +79,11 @@ class MultiHeadInteractionAttention(nn.Module):
 
 # Define the model architecture
 class AttentionDTA(nn.Module):
-    def __init__(self):
+    def __init__(self, smiles_vocab_size=65, protein_vocab_size=26):
         super().__init__()
         
-        self.smiles_embedding = nn.Embedding(65, 128, padding_idx=0)
-        self.protein_embedding = nn.Embedding(26, 128, padding_idx=0)
+        self.smiles_embedding = nn.Embedding(smiles_vocab_size, 128, padding_idx=0)
+        self.protein_embedding = nn.Embedding(protein_vocab_size, 128, padding_idx=0)
         
         # CNN block for SMILES string
         self.smiles_cnn = nn.Sequential(
@@ -91,7 +93,7 @@ class AttentionDTA(nn.Module):
         nn.ReLU(),
         nn.Conv1d(in_channels=64, out_channels=96, kernel_size=8),
         nn.ReLU()
-    )
+        )
 
         # CNN block for Protein sequence (in OriginalCode were protein_kernel = [4, 8, 12], but we use kernel size from article [4, 6, 12] to be comparable)
         self.protein_cnn = nn.Sequential(
@@ -101,7 +103,7 @@ class AttentionDTA(nn.Module):
         nn.ReLU(),
         nn.Conv1d(in_channels=64, out_channels=96, kernel_size=12),
         nn.ReLU()
-)
+        )
 
         # Multi Head Attention-Block
         self.attention = MultiHeadInteractionAttention(
