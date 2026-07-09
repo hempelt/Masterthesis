@@ -121,9 +121,6 @@ def encode_and_save(input_csv, output_path, vocab, k=8):
         )
     )
 
-    # IC50 in pIC50 transformieren
-    df["pIC50"] = -np.log10(df["IC50 (nM)"].astype(float) * 1e-9)
-
     # Arrays vorbereiten
     X_smiles = np.stack(df["smiles_encoded"].values)
     X_protein = np.stack(df["protein_encoded"].values)

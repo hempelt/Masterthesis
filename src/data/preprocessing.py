@@ -1,40 +1,45 @@
 import pandas as pd
+import numpy as np
 from sklearn.model_selection import train_test_split
 
+# Datensatz aus BindingDB_BindingDB_Articles.tsv mit UTF-8-Encoding laden
+df = pd.read_csv('data/raw/BindingDB_BindingDB_Articles.tsv', sep='\t', encoding='utf-8', usecols=['Ligand SMILES', 'BindingDB Target Chain Sequence 1', 'IC50 (nM)'])
 
-#load data from BindingDB_BindingDB_Articles.tsv with unicode encoding
-df = pd.read_csv(
-    'data/raw/BindingDB_BindingDB_Articles.tsv', 
-    sep='\t', 
-    encoding='utf-8',
-    usecols=['Ligand SMILES', 'BindingDB Target Chain Sequence 1', 'IC50 (nM)'],
-    low_memory=False)
+# Spaltennamen bereinigen: Leerzeichen entfernen, in Kleinbuchstaben umwandeln und Leerzeichen durch Unterstriche ersetzen
+df.columns = df.columns.str.strip().str.lower().str.replace(' ', '_')
+# Entferne Sonderzeichen aus den Spaltennamen
+df.columns = df.columns.str.replace(r"[^a-z0-9_]", "", regex=True)
+# Spalte bindingdb_target_chain_sequence_1 in protein_sequence umbenennen
+df.rename(columns={'bindingdb_target_chain_sequence_1': 'protein_sequence'}, inplace=True)
 
-#General rule-based preprocessing steps such as removing missing or invalid values and applying the fixed pIC50 transformation 
-# were performed before the train-test split, as these steps do not learn information from the data.
+# Alle Datensätze mit fehlenden Werten in den Spalten ic50_nm, protein_sequence und ligand_smiles entfernen
+df = df[['ligand_smiles', 'protein_sequence', 'ic50_nm']].dropna()
 
-# drop all samples with empty values in the columns IC50 (nM), BindingDB Target Chain Sequence 1 and Ligand SMILES
-df = df[['Ligand SMILES', 'BindingDB Target Chain Sequence 1', 'IC50 (nM)']].dropna()
-#transform column IC50 (nM) to numeric and remove all samples with non-numeric values in the column IC50 (nM)
-df['IC50 (nM)'] = pd.to_numeric(df['IC50 (nM)'], errors='coerce')
-df = df.dropna(subset=['IC50 (nM)'])
-#filter all samples were IC50 is < 0 or > 1e7
-df = df[(df['IC50 (nM)'] > 0) & (df['IC50 (nM)'] <= 1e7)]
-# Reduce the dataset to 1000 random samples for faster training this has to be removed for the final model training
-#df = df.sample(n=1000, random_state=42).reset_index(drop=True)
+# Spalte ic50_nm in numerische Werte umwandeln. # Nicht-numerische Werte werden zu NaN und anschließend entfernt
+df['ic50_nm'] = pd.to_numeric(df['ic50_nm'], errors='coerce')
+df = df.dropna(subset=['ic50_nm'])
 
-# For the following steps the data set is split into a training and test set.
+# Duplikate basierend auf den Spalten ligand_smiles, protein_sequence und ic50_nm entfernen
+df = df.drop_duplicates(subset=["ligand_smiles", "protein_sequence", "ic50_nm"],keep="first")
 
-train_df, test_df = train_test_split(
-    df,
-    test_size=0.2,
-    random_state=42
-)
-# Save train und test data as seperate CSV files
+# IC50 muss positiv sein, da log10 nur für positive Werte definiert ist
+df = df[df["ic50_nm"] > 0]
+
+# IC50-Werte von nM in Molar (M) umrechnen
+IC50_M = df["ic50_nm"] * 1e-9
+
+# IC50-Werte durch negative dekadische Logarithmierung in pIC50 transformieren
+df["pic50"] = -np.log10(IC50_M)
+
+# die Spalte ic50nm entfernen, da wir nur noch die Spalte pic50 benötigen
+df = df.drop(columns=["ic50_nm"])
+
+# Datensatz in Trainings- und Testdaten aufteilen
+train_df, test_df = train_test_split(df, test_size=0.2, random_state=42)
+
+# Trainings- und Testdaten als separate CSV-Dateien speichern
 train_df.to_csv('data/processed/train_data.csv', index=False)
 test_df.to_csv('data/processed/test_data.csv', index=False)
-# Print success message
-print(f'✅ Data set was splitted. Train data size: {train_df.shape}, Test data size: {test_df.shape}')
 
-# After splitting, any data-dependent transformations or learned representations should be fitted only on the training set 
-# to avoid information leakage from the test set.
+# Erfolgsmeldung mit Größe der Trainings- und Testdaten ausgeben
+print(f'✅ Data set was split. Train data size: {train_df.shape}, Test data size: {test_df.shape}')

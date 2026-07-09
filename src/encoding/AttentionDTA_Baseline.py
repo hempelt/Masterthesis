@@ -57,8 +57,6 @@ def encode_and_save(input_csv, output_path):
     # Label encoding for protein sequences
     df['protein_encoded'] = df['BindingDB Target Chain Sequence 1'].apply(label_protein)
 
-    # Log-transform IC50 values to pIC50
-    df['pIC50'] = -np.log10(df['IC50 (nM)'].astype(float) * 1e-9)
 
     # Prepare arrays
     X_smiles = np.stack(df['smiles_encoded'].values)
