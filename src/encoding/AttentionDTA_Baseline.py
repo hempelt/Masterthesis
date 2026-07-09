@@ -52,16 +52,16 @@ def encode_and_save(input_csv, output_path):
     df = pd.read_csv(input_csv, sep=',', encoding='utf-8')
 
     # Label encoding for SMILES strings
-    df['smiles_encoded'] = df['Ligand SMILES'].apply(label_smiles)
+    df['smiles_encoded'] = df['ligand_smiles'].apply(label_smiles)
 
     # Label encoding for protein sequences
-    df['protein_encoded'] = df['BindingDB Target Chain Sequence 1'].apply(label_protein)
+    df['protein_encoded'] = df['protein_sequence'].apply(label_protein)
 
 
     # Prepare arrays
     X_smiles = np.stack(df['smiles_encoded'].values)
     X_protein = np.stack(df['protein_encoded'].values)
-    y = df['pIC50'].values.astype(np.float32)
+    y = df['pic50'].values.astype(np.float32)
 
     # Create PyTorch tensors
     X_smiles_tensor = torch.tensor(X_smiles, dtype=torch.long)

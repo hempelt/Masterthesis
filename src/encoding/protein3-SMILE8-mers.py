@@ -142,7 +142,7 @@ def encode_and_save(input_csv, output_path, smiles_vocab, protein_vocab):
     df = pd.read_csv(input_csv, sep=",", encoding="utf-8")
 
     # SMILES-Encoding als 8-mer-Wörter
-    df["smiles_encoded"] = df["Ligand SMILES"].apply(
+    df["smiles_encoded"] = df["ligand_smiles"].apply(
         lambda seq: label_SMILES_kmers(
             sequence=seq,
             vocab=smiles_vocab,
@@ -152,7 +152,7 @@ def encode_and_save(input_csv, output_path, smiles_vocab, protein_vocab):
     )
 
     # Protein-Encoding als 3-mer-Wörter
-    df["protein_encoded"] = df["BindingDB Target Chain Sequence 1"].apply(
+    df["protein_encoded"] = df["protein_sequence"].apply(
         lambda seq: label_protein_kmers(
             sequence=seq,
             vocab=protein_vocab,
@@ -165,7 +165,7 @@ def encode_and_save(input_csv, output_path, smiles_vocab, protein_vocab):
     # Arrays vorbereiten
     X_smiles = np.stack(df["smiles_encoded"].values)
     X_protein = np.stack(df["protein_encoded"].values)
-    y = df["pIC50"].values.astype(np.float32)
+    y = df["pic50"].values.astype(np.float32)
 
     # PyTorch-Tensoren erstellen
     X_smiles_tensor = torch.tensor(X_smiles, dtype=torch.long)
@@ -211,12 +211,12 @@ Path("data/encoded").mkdir(parents=True, exist_ok=True)
 train_df = pd.read_csv(train_csv, sep=",", encoding="utf-8")
 
 smiles_vocab = build_SMILES_kmer_vocab(
-    smiles_sequences=train_df["Ligand SMILES"],
+    smiles_sequences=train_df["ligand_smiles"],
     k=8
 )
 
 protein_vocab = build_protein_kmer_vocab(
-    protein_sequences=train_df["BindingDB Target Chain Sequence 1"],
+    protein_sequences=train_df["protein_sequence"],
     k=3
 )
 

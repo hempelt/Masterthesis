@@ -113,10 +113,10 @@ def encode_and_save(input_csv, output_path, protein_vocab, k=3):
     df = pd.read_csv(input_csv, sep=",", encoding="utf-8")
 
     # SMILES-Encoding bleibt identisch zur AttentionDTA-Baseline
-    df["smiles_encoded"] = df["Ligand SMILES"].apply(label_smiles)
+    df["smiles_encoded"] = df["ligand_smiles"].apply(label_smiles)
 
     # Protein-Encoding als 3-mer-Wörter
-    df["protein_encoded"] = df["BindingDB Target Chain Sequence 1"].apply(
+    df["protein_encoded"] = df["protein_sequence"].apply(
         lambda seq: label_protein_kmers(
             sequence=seq,
             vocab=protein_vocab,
@@ -129,7 +129,7 @@ def encode_and_save(input_csv, output_path, protein_vocab, k=3):
     # Arrays vorbereiten
     X_smiles = np.stack(df["smiles_encoded"].values)
     X_protein = np.stack(df["protein_encoded"].values)
-    y = df["pIC50"].values.astype(np.float32)
+    y = df["pic50"].values.astype(np.float32)
 
     # PyTorch-Tensoren erstellen
     X_smiles_tensor = torch.tensor(X_smiles, dtype=torch.long)
@@ -174,7 +174,7 @@ Path("data/encoded").mkdir(parents=True, exist_ok=True)
 train_df = pd.read_csv(train_csv, sep=",", encoding="utf-8")
 
 protein_vocab = build_protein_kmer_vocab(
-    protein_sequences=train_df["BindingDB Target Chain Sequence 1"],
+    protein_sequences=train_df["protein_sequence"],
     k=3
 )
 
