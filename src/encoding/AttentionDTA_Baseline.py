@@ -4,7 +4,7 @@ from sklearn.metrics import mean_squared_error, r2_score
 import torch
 
 
-# SMILES-Zeichen-Wörterbuch aus der Arbeit
+# SMILES-Zeichen-Wörterbuch aus dem Quellcode von Zhao et al. (2023) übernommen
 CHARISOSMISET = {
     "#": 29, "%": 30, ")": 31, "(": 1, "+": 32, "-": 33, "/": 34, ".": 2,
     "1": 35, "0": 3, "3": 36, "2": 4, "5": 37, "4": 5, "7": 38, "6": 6,
@@ -16,7 +16,7 @@ CHARISOSMISET = {
     "l": 25, "o": 61, "n": 26, "s": 62, "r": 27, "u": 63, "t": 28, "y": 64
 }
 
-# Protein-Aminosäuren-Wörterbuch
+# Protein-Aminosäuren-Wörterbuch aus dem Quellcode von Zhao et al. (2023) übernommen
 CHARPROTSET = {
     "A": 1, "C": 2, "B": 3, "E": 4, "D": 5, "G": 6,
     "F": 7, "I": 8, "H": 9, "K": 10, "M": 11, "L": 12,
@@ -24,6 +24,7 @@ CHARPROTSET = {
     "U": 19, "T": 20, "W": 21, "V": 22, "Y": 23, "X": 24, "Z": 25
 }
 
+# Funktion zur Kodierung von SMILES-Zeichenketten in numerische Arrays
 def label_smiles(smiles, max_len=100):
     encoded = np.zeros(max_len, dtype=np.int64)
 
@@ -32,6 +33,7 @@ def label_smiles(smiles, max_len=100):
 
     return encoded
 
+# Funktion zur Kodierung von Protein-Aminosäuresequenzen in numerische Arrays
 def label_protein(sequence, max_len=1200):
     encoded = np.zeros(max_len, dtype=np.int64)
 
@@ -44,8 +46,10 @@ def label_protein(sequence, max_len=1200):
 
 def encode_and_save(input_csv, output_path):
     """
-    Encodes SMILES and protein sequences for the model
-    and saves the resulting tensors as a .pt file.
+   Kodiert die SMILES-Zeichenketten und Proteinsequenzen aus einer CSV-Datei in numerische Arrays und speichert sie als PyTorch-Tensoren.
+   Args:
+       input_csv (str): Pfad zur Eingabe-CSV-Datei, die die Spalten 'ligand_smiles', 'protein_sequence' und 'pic50' enthält.
+       output_path (str): Pfad zur Ausgabedatei, in der die kodierten Tensoren gespeichert werden sollen.   
     """
 
     # Load data
@@ -83,7 +87,8 @@ def encode_and_save(input_csv, output_path):
     print("X_smiles:", X_smiles_tensor.shape)
     print("X_protein:", X_protein_tensor.shape)
     print("y:", y_tensor.shape)
-
+    print("protein_max_len:", 1200)
+    print("smiles_max_len:", 100)
 
 encode_and_save(
     "data/processed/train_data.csv",

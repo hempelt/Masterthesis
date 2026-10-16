@@ -77,7 +77,7 @@ class MultiHeadInteractionAttention(nn.Module):
 
 
 
-# Define the model architecture
+# Definition of the AttentionDTA model
 class AttentionDTA(nn.Module):
     def __init__(self, smiles_vocab_size=65, protein_vocab_size=26):
         super().__init__()
@@ -85,7 +85,7 @@ class AttentionDTA(nn.Module):
         self.smiles_embedding = nn.Embedding(smiles_vocab_size, 128, padding_idx=0)
         self.protein_embedding = nn.Embedding(protein_vocab_size, 128, padding_idx=0)
         
-        # CNN block for SMILES string
+        # CNN Block für die SMILES-Sequenz (in OriginalCode waren smiles_kernel = [4, 8, 12], aber wir verwenden Kernelgröße aus Artikel [4, 6, 8] um vergleichbar zu sein)
         self.smiles_cnn = nn.Sequential(
         nn.Conv1d(in_channels=128, out_channels=32, kernel_size=4),
         nn.ReLU(),
@@ -95,7 +95,7 @@ class AttentionDTA(nn.Module):
         nn.ReLU()
         )
 
-        # CNN block for Protein sequence (in OriginalCode were protein_kernel = [4, 8, 12], but we use kernel size from article [4, 6, 12] to be comparable)
+        # CNN Block für die Protein-Sequenz (in OriginalCode waren protein_kernel = [4, 8, 12], aber wir verwenden Kernelgröße aus Artikel [4, 6, 12] um vergleichbar zu sein)
         self.protein_cnn = nn.Sequential(
         nn.Conv1d(in_channels=128, out_channels=32, kernel_size=4),
         nn.ReLU(),

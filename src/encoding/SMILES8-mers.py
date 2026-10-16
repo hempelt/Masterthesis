@@ -5,7 +5,7 @@ import json
 from pathlib import Path
 
 
-# Protein-Aminosäuren-Wörterbuch wie bei AttentionDTA
+# Protein-Aminosäuren-Wörterbuch aus dem Quellcode von Zhao et al. (2023) übernommen
 CHARPROTSET = {
     "A": 1, "C": 2, "B": 3, "E": 4, "D": 5, "G": 6,
     "F": 7, "I": 8, "H": 9, "K": 10, "M": 11, "L": 12,
@@ -34,7 +34,7 @@ def label_protein(sequence, max_len=1200):
 
 
 # ------------------------------------------------------------
-# SMILES-8-mer-Encoding nach WideDTA-Idee
+# SMILES-8-mer-Encoding nach Öztürk et al. (2018) für WideDTA
 # ------------------------------------------------------------
 
 def SMILES_to_kmers(sequence, k=8):

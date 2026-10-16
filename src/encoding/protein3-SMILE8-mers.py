@@ -9,7 +9,7 @@ from pathlib import Path
 
 
 # ------------------------------------------------------------
-# SMILES-8-mer-Encoding nach WideDTA-Idee
+# SMILES-8-mer-Encoding nach Öztürk et al. (2018) für WideDTA
 # ------------------------------------------------------------
 def SMILES_to_kmers(sequence, k=8):
     """
@@ -68,7 +68,7 @@ def label_SMILES_kmers(sequence, vocab, max_len=100, k=8):
 
 
 # ------------------------------------------------------------
-# Protein-3-mer-Encoding nach WideDTA-Idee
+# Protein-3-mer-Encoding nach Öztürk et al. (2018) für WideDTA
 # ------------------------------------------------------------
 
 def protein_to_kmers(sequence, k=3):

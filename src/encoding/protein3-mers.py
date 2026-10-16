@@ -6,7 +6,7 @@ from pathlib import Path
 
 
 # ------------------------------------------------------------
-# SMILES-Zeichen-Wörterbuch wie bei AttentionDTA
+# SMILES-Zeichen-Wörterbuch aus dem Quellcode von Zhao et al. (2023) übernommen
 # ------------------------------------------------------------
 
 CHARISOSMISET = {
@@ -39,7 +39,7 @@ def label_smiles(smiles, max_len=100):
 
 
 # ------------------------------------------------------------
-# Protein-3-mer-Encoding nach WideDTA-Idee
+# Protein-3-mer-Encoding nach von Öztürk et al. (2018) für WideDTA
 # ------------------------------------------------------------
 
 def protein_to_kmers(sequence, k=3):

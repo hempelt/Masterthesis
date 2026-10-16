@@ -22,6 +22,9 @@ df = df.dropna(subset=['ic50_nm'])
 # Duplikate basierend auf den Spalten ligand_smiles, protein_sequence und ic50_nm entfernen
 df = df.drop_duplicates(subset=["ligand_smiles", "protein_sequence", "ic50_nm"],keep="first")
 
+# Filtere die Daten, um nur Datensätze mit IC50-Werten < 10.000 nM zu behalten
+df = df[df["ic50_nm"] <= 10_000]
+
 # IC50 muss positiv sein, da log10 nur für positive Werte definiert ist
 df = df[df["ic50_nm"] > 0]
 
