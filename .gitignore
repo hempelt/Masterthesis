@@ -12,3 +12,6 @@ __pycache__/
 *.pyc
 *.egg-info/
 
+
+# Local visual studio code settings
+.vscode/

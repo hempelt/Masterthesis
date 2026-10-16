@@ -124,9 +124,9 @@ Kombination aus:
 - Protein-3-mer-Encoding
 - SMILES-8-mer-Encoding
 
-Für das Training der Modelle wurden die erzeugten `.pt`-Dateien mit den codierten Eingabedaten im Verzeichnis `data/encoded/` gespeichert. Aufgrund ihrer Dateigröße wurden diese Dateien nicht in das GitHub-Repository aufgenommen, sondern in Google Drive übertragen und anschließend in Google Colab für das Training und die Evaluation der Modelle geladen.
+Für das Training der Modelle wurden die erzeugten `.pt`-Dateien mit den codierten Eingabedaten im Verzeichnis `data/encoded/` gespeichert. Danach wurden die Dateien in Google Drive hochgeladen und anschließend in Google Colab für das Training und die Evaluation der Modelle geladen. Aufgrund ihrer Dateigröße wurden diese Dateien nicht in das GitHub-Repository aufgenommen.
 
-Die für die k-mer-basierten Encodings erstellten Vokabulare befinden sich ebenfalls im Verzeichnis `data/encoded/`.
+Die für die k-mer-basierten Encodings erstellten Vokabulare befinden jedoch als json-Dateien im Verzeichnis `data/encoded/`.
 
 ---
 
@@ -214,7 +214,6 @@ Die Ergebnisse der Evaluation befinden sich ebenfalls im Notebook:
 
 `notebooks/training_evaluation_colab.ipynb`
 
-Die im Rahmen der Modellevaluation erzeugten und in der Masterarbeit verwendeten Abbildungen befinden sich im Verzeichnis `reports/`.
 
 ---
 
